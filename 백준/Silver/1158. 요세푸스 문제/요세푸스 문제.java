@@ -5,10 +5,9 @@ public class Main {
 		int n = sc.nextInt();
 		int k = sc.nextInt();	
 		sc.close();
-		int []circle = null;
-		int []dq = null;
-		circle = new int[n];
-		dq = new int[n];
+		int []circle = new int[n];
+		int []dq = new int[n];
+
 		for(int i=1; i<=n; i++) {//덱 선언
 			dq[i-1]= i;
 		}
@@ -23,7 +22,6 @@ public class Main {
 			if(dq[index]!=0) {
 				if(cnt%k==0) {
 					circle[circle_index]=dq[index];
-					//System.out.println(dq[index]);
 					dq[index]=0;
 					size--;
 					circle_index++;
