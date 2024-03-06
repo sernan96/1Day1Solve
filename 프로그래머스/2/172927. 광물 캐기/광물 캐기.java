@@ -14,10 +14,7 @@ class Solution {
         }
         hardness = new int[k][4];
         int index=0;
-        int range=minerals.length;
-        if(minerals.length>gocks*5){
-            range = gocks*5;
-        }
+        int range=Math.min(minerals.length,gocks*5);
         for(int i =0; i<range; i++){
             score(minerals[i], index);
             if((i+1)%5==0){
@@ -27,13 +24,8 @@ class Solution {
         Arrays.sort(hardness, Comparator.comparingInt(o1->o1[3]));//돌곡 피로도 오름차순
         index=0;
         for(int i = k-1; i>=0; i--){
-            int j = whichpick();
-            if(j<0){
-                return answer;
-            }
-            answer+=hardness[i][j];
+            answer+=hardness[i][whichpick()];
         }
-        System.out.println(answer);
         return answer;
     }
     static int whichpick(){
@@ -46,12 +38,9 @@ class Solution {
             gock[1]--;
             return 2;
         }
-        else if(gock[2]>0){
+        else{
             gock[2]--;
             return 3;
-        }
-        else{// 남은 곡괭이가 없다.
-            return -1;//-1리턴
         }
     }
     static void score(String a, int index){
