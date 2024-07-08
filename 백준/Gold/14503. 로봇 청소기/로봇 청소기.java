@@ -4,7 +4,6 @@ import java.util.*;
 public class Main {
     static int cnt =0;
     static int [][] room;
-    static int [][] moving;
     static boolean [][] visited;
     static int []dx = {-1, 0, 1, 0};
     static int []dy = {0, 1, 0, -1};
@@ -18,13 +17,11 @@ public class Main {
         int c = Integer.parseInt(rc.nextToken());
         int d = Integer.parseInt(rc.nextToken());//0북, 1동, 2남, 3서
         room = new int[N][M];
-        moving =  new int[N][M];
         visited = new boolean[N][M];//청소한 곳임
         for(int i =0; i<N; i++){
             StringTokenizer input = new StringTokenizer(br.readLine());
             for (int j=0; j<M; j++){
                 room[i][j]=Integer.parseInt(input.nextToken());
-                moving[i][j]=room[i][j];
             }
         }
         move(r, c, d);
@@ -38,8 +35,6 @@ public class Main {
             cnt++;
         }
         visited[x][y]=true;//1번 청소한다
-
-        moving[x][y]=cnt;
         if((room[x+1][y]==1||visited[x+1][y])&&(room[x][y+1]==1||visited[x][y+1])&&(room[x-1][y]==1||visited[x-1][y])&&(room[x][y-1]==1||visited[x][y-1])){//2번 동서남북 4칸 중 0이 없을 경우
             int moveDir;
             if(dir >=2){//방향을 뒤집어줌
