@@ -9,10 +9,10 @@ class Main {
             this.cost = cost;
         }
     }
-    
+
     static int[] p;
     static List<Integer> road;
-    
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int n = Integer.parseInt(br.readLine());
@@ -28,11 +28,11 @@ class Main {
             int cost = Integer.parseInt(st.nextToken());
             graph.get(start).add(new Node(end, cost));
         }
-        
+
         StringTokenizer m3 = new StringTokenizer(br.readLine());
         int realStart = Integer.parseInt(m3.nextToken());
         int realEnd = Integer.parseInt(m3.nextToken());
-        
+
         PriorityQueue<Node> q = new PriorityQueue<>(Comparator.comparingInt(o -> o.cost));
         q.offer(new Node(realStart, 0));
         int[] dist = new int[n + 1];
@@ -40,7 +40,7 @@ class Main {
         p = new int[n + 1];
         dist[realStart] = 0;
         road = new ArrayList<>();
-        
+
         while (!q.isEmpty()) {
             Node current = q.poll();
             if (current.cost > dist[current.idx]) {
@@ -54,22 +54,17 @@ class Main {
                 }
             }
         }
-        
-        if (dist[realEnd] == Integer.MAX_VALUE) {
-            System.out.println("No path found");
-            return;
-        }
-        
+
         findP(realEnd);
         road.add(realEnd);
-        
+
         System.out.println(dist[realEnd]);
         System.out.println(road.size());
         for (int node : road) {
             System.out.print(node + " ");
         }
     }
-    
+
     static void findP(int e) {
         if (p[e] != 0) {
             findP(p[e]);
