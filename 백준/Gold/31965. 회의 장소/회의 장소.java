@@ -1,10 +1,9 @@
 import java.io.*;
 import java.util.*;
 
-import static javax.swing.text.html.HTML.Attribute.N;
-
 public class Main{
     static long []houseNum;
+    static long []preFix;
     static int N;
     static StringBuilder sb = new StringBuilder();
     public static void main(String[] args) throws IOException {
@@ -13,10 +12,12 @@ public class Main{
         N = Integer.parseInt(NQ.nextToken());
         int Q = Integer.parseInt(NQ.nextToken());
         StringTokenizer House = new StringTokenizer(br.readLine());
-        houseNum= new long[N+1];
+        houseNum = new long[N+1];
+        preFix = new long[N+1];
         for(int i=1; i<=N; i++){
             int house = Integer.parseInt(House.nextToken());
             houseNum[i]=house;
+            preFix[i] = preFix[i-1]+house;
         }
         while (Q--!=0){
             StringTokenizer LR = new StringTokenizer(br.readLine());
@@ -24,46 +25,32 @@ public class Main{
         }
         sb.setLength(sb.length()-1);
         System.out.print(sb);
-     }
+    }
 
     static void getLR(int left, int right) {// 1 3 5 10 11  LR 2 2
-        int l=1, r=N;
-        boolean breaker = true;
-        while(breaker){
-            breaker = false;
-            if(left>houseNum[l]){
-                l++;
-                breaker = true;
-            }
-            if(right<houseNum[r]){
-                r--;
-                breaker = true;
-            }
-            if (l >= r) {
-                sb.append(0+"\n");
-                return;
-            }
+        int l = Arrays.binarySearch(houseNum, left);
+        if(l <0){
+            l = -1*l-1;
         }
-        //이제 해당 부분 부분 정렬로  큰수부터 앞뒤로 빼서 절대값 구해서 result에 append
-        getHardness(calCost(l, r));
-    }
-    static void getHardness(long [] dp){
-        Arrays.sort (dp);
-        long result = 0;
-        for(int i=0; i<dp.length-1; i++){
-            result += Math.abs(dp[i]-dp[i+1]);
+        int r = Arrays.binarySearch(houseNum, right);
+        if(r <0){
+            r = -1*r-2;
         }
-        sb.append(result+"\n");
+        if(l>=r){
+            sb.append("0"+"\n");
+            return;
+        }
+        calCost(l, r);
     }
+    static long getCost(int i, int j, int k) {
+        long leftCost = (k - i + 1) * houseNum[k] - (preFix[k] - preFix[i - 1]);
+        long rightCost = (preFix[j] - preFix[k - 1]) - (j - k + 1) * houseNum[k];
 
-    static long[] calCost(int l, int r){
-        long [] dp = new long[N+1];
-        for(int i=l; i<=r; i++){
-            for(int j=i+1; j<=r; j++) {
-                dp[i]+=Math.abs(houseNum[i]-houseNum[j]);
-                dp[j]+=Math.abs(houseNum[i]-houseNum[j]);
-            }
-        }
-        return Arrays.copyOfRange(dp, l, r+1);
-     }
+        return leftCost + rightCost;
+    }
+    static void calCost(int l, int r){
+        long max = Math.max(getCost(l, r, l), getCost(l, r, r));
+        long min = getCost(l, r, (l + r) / 2);
+        sb.append((max-min)+"\n");
+    }
 }
