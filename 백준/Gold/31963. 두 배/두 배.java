@@ -7,7 +7,7 @@ public class Main {
         int N = Integer.parseInt(br.readLine());
         StringTokenizer st = new StringTokenizer(br.readLine());
         ArrayList<Integer> arr = new ArrayList<>();
-        int cnt = 0;
+        long cnt = 0;
         while (st.hasMoreTokens()){
             arr.add(Integer.parseInt(st.nextToken()));
         }
@@ -15,15 +15,13 @@ public class Main {
             System.out.print(cnt);
             return;
         }
+
+        long[] cnt_arr = new long[N];
         for(int i=1; i<N; i++){
-            int front =arr.get(i-1);
-            int back =arr.get(i);
-            if(front>back){// 7 3
-                while (back<front){
-                    back*=2;
-                    cnt++;
-                }
-                arr.set(i, back);
+            double ratio = Math.ceil(Math.log(arr.get(i - 1) / (double)arr.get(i) )/ Math.log(2)) + cnt_arr[i-1];
+            if (ratio > 0) {
+                cnt_arr[i] = Math.max(0, (long)ratio);
+                cnt += cnt_arr[i];
             }
         }
         System.out.print(cnt);
