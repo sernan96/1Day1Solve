@@ -38,7 +38,6 @@ public class Main {
                 continue;
             }
             dp[x][y] = Math.max(DFS(mx, my)+1, dp[x][y]);
-            DFS(mx, my);
         }
         return dp[x][y];
     }
