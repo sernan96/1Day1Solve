@@ -1,70 +1,51 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.StringTokenizer;
-
+import java.io.*;
+import java.util.*;
 public class Main {
+    static int n,m, max=0;
+    static int [][] sum, map;
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
+        sum = new int[n+1][m+1];
+        map = new int[n+1][m+1];
+        for(int i=1; i<=n; i++){
+            String str = br.readLine();
+            for(int j=1; j<=m; j++){
+                map[i][j] = str.charAt(j-1) =='0'? 0:1;
+            }
+        }
+        for(int i=1; i<=n; i++){
+            for(int j=1; j<=m; j++){
+                sum[i][j] = sum[i-1][j] + sum[i][j-1] - sum[i-1][j-1] + map[i][j];
+            }
+        }
+        for(int i=1; i<=n; i++){
+            for(int j=1; j<=m; j++){
+                if(map[i][j]==1){
+                    check(i,j);
+                }
+            }
+        }
+        System.out.print(max);
+    }
+    static void check(int x, int y){
+        int len = 1;
+        int res = 1;
+        while (x+len<=n && y+len<=m){
+            int dx = x+len;
+            int dy = y+len;
+            int area = sum[dx][dy]-sum[x-1][dy]-sum[dx][y-1]+sum[x-1][y-1];
 
-	public static void main(String[] args) throws NumberFormatException, IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-		StringTokenizer st = new StringTokenizer(br.readLine());
+            len++;
 
-		int N = Integer.parseInt(st.nextToken());
-		int M = Integer.parseInt(st.nextToken());
-
-		int[][] map = new int[N + 1][M + 1];
-		for (int i = 1; i <= N; i++) {
-			String[] input = br.readLine().split("");
-
-			for (int j = 1; j <= M; j++) {
-				map[i][j] = Integer.parseInt(input[j - 1]);
-			}
-		}
-
-		// (0, 0)부터 (i, j)까지의 부분 합
-		int[][] psum = new int[N + 1][M + 1];
-		for (int i = 1; i <= N; i++) {
-			for (int j = 1; j <= M; j++) {
-				psum[i][j] = psum[i - 1][j] + psum[i][j - 1] - psum[i - 1][j - 1] + map[i][j];
-			}
-		}
-
-		int ans = 0;
-		for (int i = 1; i <= N; i++) {
-			for (int j = 1; j <= M; j++) {
-				// 게임판의 숫자가 1이라면,
-				if (map[i][j] == 1) {
-					int res = 1;
-
-					int idx = 1;
-
-					// 2 x 2, 3 x 3, ... 사각형이 가능한지 탐색함.
-					while (i + idx <= N && j + idx <= M) {
-						// 특정 두 지점 사이의 부분 합
-						int space = psum[i + idx][j + idx] - psum[i + idx][j - 1] - psum[i - 1][j + idx]
-								+ psum[i - 1][j - 1];
-
-						idx++;
-
-						if (space != idx * idx) {
-							break;
-						}
-
-						res = idx * idx;
-					}
-
-					ans = Math.max(ans, res);
-				}
-			}
-		}
-
-		bw.write(ans + "\n");
-		bw.flush();
-		bw.close();
-		br.close();
-	}
+            if(area != len * len){
+                break;
+            }
+            res = len * len;
+        }
+        max=Math.max(max, res);
+    }
 
 }
