@@ -39,7 +39,7 @@ public class Main {
     static void makeWall(int count){
         if(count==3){
             //여기서 테스트해보고 결과 출력
-            if(!check()&&find){
+            if(find&&!check()){
                 find=false;
                 System.out.print("YES");
             }
