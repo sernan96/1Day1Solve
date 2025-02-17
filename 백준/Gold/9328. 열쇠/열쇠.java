@@ -43,6 +43,7 @@ class Main {
                 }
                 else if(map[x][y]>='a'&&map[x][y]<='z'&&!keys.contains(map[x][y]-'a')){//새로운 열쇠
                     keys.add(map[x][y]-'a');
+                    map[x][y]='.';
                     visited = new boolean [H+2][W+2];
                     q.add(new int[]{0,0});
                     visited[0][0]= true;
