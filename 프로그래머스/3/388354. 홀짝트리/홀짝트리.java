@@ -1,107 +1,66 @@
 import java.util.*;
 
 class Solution {
-
-    private int[] inDegree;
-    private int[] parent;
-
+    static int [] edge, parent;
     public int[] solution(int[] nodes, int[][] edges) {
-        int[] answer = {};
-
-        int lastNode = 0;
-        for(int node : nodes) {
-            lastNode = Math.max(lastNode, node);
+        int maxNode = -1;
+        for(int x: nodes){
+            maxNode = Math.max(maxNode, x);
         }
-
-        inDegree = new int[lastNode + 1];
-        parent = new int[lastNode + 1];
-        for(int i = 1; i <= lastNode; i++) {
+        edge = new int [maxNode+1];
+        parent = new int [maxNode+1];
+        for(int i = 1; i <= maxNode; i++) {
             parent[i] = i;
         }
-
-        for(int[] edge : edges) {
-            int a = edge[0];
-            int b = edge[1];
-            inDegree[a]++;
-            inDegree[b]++;
-            merge(a, b);
+        for(int [] x: edges){
+            int n1 = x[0];
+            int n2 = x[1];
+            edge[n1]++;
+            edge[n2]++;
+            union(n1, n2);
         }
-
-        Map<Integer, TreeInfo> MAP = new HashMap();
-        for(int node : nodes) {
-            int group = find(node);
-
-            TreeInfo t = MAP.getOrDefault(group, new TreeInfo());
-
-            if((node % 2 == 0) && (inDegree[node] % 2 == 0)) {
-                t.evenNode++;
-            } else if((node % 2 == 1) && (inDegree[node] % 2 == 1)) {
-                t.oddNode++;
-            } else if((node % 2 == 0) && (inDegree[node] % 2 == 1)) {
-                t.reverseEvenNode++;
-            } else if((node % 2 == 1) && (inDegree[node] % 2 == 0)) {
-                t.reverseOddNode++;
+        Map<Integer, int[]> graph = new HashMap<>();
+        for(int x: nodes){
+            int tempHead = find(x);//임시반장
+            int [] info = graph.containsKey(tempHead)?graph.get(tempHead):new int[]{0,0};
+            int oddEven = info[0];
+            int reverseOddEven = info[1];
+            if((edge[x]%2==0&& x%2==0)||((edge[x]%2!=0&& x%2!=0)) ){ //짝수 홀수 노드인 경우
+                oddEven++;
             }
-
-            MAP.put(group, t);
+            if((edge[x]%2==0&& x%2!=0)||((edge[x]%2!=0&& x%2==0))) {// 역홀짝 노드인 경우
+                reverseOddEven++;
+            }
+            graph.put(tempHead, new int[]{oddEven, reverseOddEven});
         }
-
         int tree = 0;
-        int rTree = 0;
-        for(TreeInfo treeInfo : MAP.values()) {
-            if(treeInfo.isTree()) {
+        int reverseTree = 0;
+        for(int [] x: graph.values()){
+            int t = x[0];
+            int rT = x[1];
+            if(t==1){
                 tree++;
             }
-
-            if(treeInfo.isReverseTree()) {
-                rTree++;
-            }    
-        }
-
-        return new int[]{tree, rTree};
-    }
-
-    public class TreeInfo {
-        public int oddNode;
-        public int evenNode;
-        public int reverseOddNode;
-        public int reverseEvenNode;
-
-        public TreeInfo() {
-            this.oddNode = 0;
-            this.evenNode = 0;
-            this.reverseOddNode = 0;
-            this.reverseEvenNode = 0;
-        }
-
-        public boolean isTree() {
-            if((oddNode == 1 && evenNode == 0) || (oddNode == 0 && evenNode == 1)) {
-                return true;
+            if(rT==1){
+                reverseTree++;
             }
-
-            return false;
         }
-
-        public boolean isReverseTree() {
-            if((reverseOddNode == 1 && reverseEvenNode == 0) || (reverseOddNode == 0 && reverseEvenNode == 1)) {
-                return true;
-            }
-
-            return false;
+        return new int[]{tree, reverseTree};
+    }
+    static int find(int node){
+        if(parent[node]==node){
+            return node;
         }
+        return parent[node] = find(parent[node]);
     }
-
-    public int find(int num) {
-        if(parent[num] == num) return num;
-        return parent[num] = find(parent[num]);
-    }
-
-    public void merge(int a, int b) {
-        a = find(a);
-        b = find(b);
-
-        if(a != b) {
-            parent[b] = a;
+    static void union(int x, int y){
+        x = find(x);
+        y = find(y);
+        if(x!=y){
+            parent[y] = x;
         }
     }
 }
+//- 그래프 생성(어차피 홀짝, 역홀짝 개수만 알면 되기에 문제상 루트노드는 아니지만 집합의 임시루트(?)로 생각해서 트리의 정보만 쏙쏙 빼서 보면 되니 유니온 파인드로 하는게 편할듯함)
+//- 홀수, 짝수, 역홀수, 역짝수 개수 저장할 class 생성 및 저장
+//- 마지막에 홀짝, 역홀짝 트리 판별로 result 반환 및 종료
