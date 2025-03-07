@@ -33,13 +33,11 @@ class Solution {
                     continue;
                 }
                 if(msg.substring(i, i+cur.length()).equals(cur)){
-                    System.out.println(msg.substring(i, i+cur.length()));
                     i+=cur.length();
                     result.add(dic.indexOf(cur));
                     if(i!=msg.length()){
                         String temp = cur+""+msg.charAt(i);
                         dic.add(temp);
-                        System.out.println("추가 "+temp);
                     }
                     i--;
                     break;
