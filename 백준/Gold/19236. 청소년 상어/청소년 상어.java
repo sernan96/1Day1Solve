@@ -1,4 +1,3 @@
-
 import java.util.*;
 //1:34:26 화장실+53분
 import java.io.*;
@@ -27,7 +26,6 @@ public class Main {
 		shark(0,0, map, fish, 0);
 		System.out.print (result);
 	}
-	static boolean first = true;
 	static void shark(int x, int y, int[][] map, int[][] fish, int ate) {
 		//분기생성전에 미리 보낼수있는지 없는지 확인하고 보냈음
 		// 1. 상어입장
@@ -37,14 +35,9 @@ public class Main {
 		fish[eatenFish][0] = 0;//죽음 처리
 		// 2. 물고기 이동
 		moveFish(map, fish);
-		if(first) {
-			
-			first = false;
-		}
 		// 3. 상어가 이동할 위치 가능한곳 전부 분기처리
 		int mx = x+dx[sharkDir];
 		int my = y+dy[sharkDir];
-		boolean flag = false;
 		map[x][y] = 0;
 		while(canGo(mx, my)) {
 			if(map[mx][my]==0) {
@@ -54,7 +47,6 @@ public class Main {
 				continue;
 			}
 			shark(mx, my, deepCopy(map), deepCopy(fish), ate+eatenFish);
-			flag = true;	
 			mx+=dx[sharkDir];
 			my+=dy[sharkDir];
 		}
@@ -111,9 +103,3 @@ public class Main {
 		return x>=0&&y>=0&&x<4&&y<4;
 	}
 }
-// 상어가 갈 수 있는 지점 중 어디로 이동하냐에 따라
-// 분기가 나뉨
-// 상어의 해당 움직임에 따른 물고기의 위치 정보를 따로 저장 -> clone 해서 깊은 복사를 하거나 분기생성후에 원상복구 시키기
-// 순서: 상어입장-> 물고기 움직이기 -> 상어 이동
-// 상어 DFS 함수(상어 위치,물고기 위치 배열), 물고기 움직이는 함수
-// 방향은 반시계로 1씩 증가하도록
