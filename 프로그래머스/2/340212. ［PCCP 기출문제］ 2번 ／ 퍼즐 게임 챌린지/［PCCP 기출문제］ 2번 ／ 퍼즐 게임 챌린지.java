@@ -35,7 +35,7 @@ class Solution {
                 middle = (left+right)/2;
             }
         }
-        return answer==0? 1: answer;
+        return answer;
     }
 }
 /*
