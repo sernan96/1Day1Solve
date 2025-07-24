@@ -13,7 +13,6 @@ public class Main {
         groups = new int[M][N];
         visited = new boolean[M][N];
         HashMap<Integer, Integer> areaMap = new HashMap<>();
-        HashMap<Integer, Set<Integer>> nearMap = new HashMap<>();
         StringBuilder sb = new StringBuilder();
         for(int i=0; i<M; i++){
             StringTokenizer st = new StringTokenizer(br.readLine());
@@ -36,16 +35,8 @@ public class Main {
         }
         sb.append(pq.size()+"\n"+pq.poll()+"\n");
         pq.clear();
-        //3.벽을 하나씩 제거해보고 가장 커지는 값을 구해서 마지막에 한꺼번에 출력 -> 너무 비효율적
-        // 아니면 그래프로 만들어서 이어져있는 영역을 합치는 방법이 가장 효과적으로 보임
-        // 그렇다면 해줄것 -> 3-1. 해당 영역을 표시한 map하나 추가
-        // 3-2. 영역 번호가 적힌 맵에서 인접한 영역을 순회하며 연결
-        // 3-3. 영역 별로 인접한 영역 너비 합 pq에 넣기(초기화 필수)
-        // 마지막에 뽑아서 StringBuilder에 추가
-        boolean [] checked = new boolean[group];
         for(int i=0; i<M; i++){
             for(int j=0; j<N; j++){
-                //상하좌우 인접한 다른 그룹 검 사
                 int groupA =groups[i][j];
                 for(int dir = 0; dir<4; dir++){
                     int xB = i+dx[dir];
@@ -54,7 +45,7 @@ public class Main {
                         continue;
                     }
                     int groupB = groups[xB][yB];
-                    if(groupA==groupB ||(checked[groupA] && checked[groupB])) {
+                    if(groupA==groupB) {
                         continue;
                     }
                     int sumArea = areaMap.get(groupA) + areaMap.get(groupB);
@@ -95,7 +86,3 @@ public class Main {
         return x>=0&&y>=0&&x<M&&y<N;
     }
 }
-/*
-1.2. BFS로 각 방의 개수 파악 및 가장 넓은 방의 넓이 구하기 -> 우선순위큐로
-3. 벽을 하나씩 제거해보고 가장 커지는 값을 구해서 마지막에 한꺼번에 출력
-*/
