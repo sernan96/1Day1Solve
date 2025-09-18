@@ -29,7 +29,6 @@ public class Main {
     static void DFS(int x, int y){
         if(y==C-1){//도달
             result++;
-
             map[x][y] = 0;
             success= true;
             return;
@@ -39,12 +38,9 @@ public class Main {
             int my = y+1;
             if(canGo(mx, my)&&map[mx][my]==1){
                 DFS(mx, my);
+                map[x][y] = 0;
                 if(success){
-                    map[x][y] = 0;
                     return;
-                }
-                else{
-                    map[x][y] = 0;
                 }
             }
         }
@@ -54,8 +50,3 @@ public class Main {
         return x>=0&&y>=0&&x<R&&y<C;
     }
 }
-/*
-DFS를 통해서 이미 방문했었던 성공이든 실패한 곳들은 방문할 필요가 없기에
-먼저 다음 재귀문을 통해 도출해낸 결과를 통해 방문처리를 해주는게 핵심
-
-*/
