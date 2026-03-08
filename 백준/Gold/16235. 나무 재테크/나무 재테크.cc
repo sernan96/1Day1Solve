@@ -9,7 +9,6 @@ struct cmp {
 	}
 };
 
-
 int alive_tree, N;
 bool is_first;
 vector<vector<int>> nutrition_map, add_nutrition_map;
@@ -60,7 +59,7 @@ int main() {
 }
 
 void eat_nutrition(int x, int y) {
-	//전년도 거름 뿌리기 (첫해가 아닌 경우)
+	//전년도 거름 뿌리기 (첫해가 아닌 경우) -> 연산 1회라도 줄이기 위해서
 	if (!is_first) {
 		nutrition_map[x][y] += add_nutrition_map[x][y];
 	}
@@ -95,23 +94,15 @@ bool can_go(int x, int y){
 int dx[] = {1, 0, -1, 0, 1, 1, -1, -1};
 int dy[] = {0, 1, 0, -1, 1, -1, 1, -1};
 void get_child_tree(int x, int y) {
-	vector<vector<int>> child_tree(N + 1, vector<int>(N + 1, 0));
 	for (int tree: trees_map[x][y]) {
 		if (tree % 5 == 0) {
 			for (int dir = 0; dir < 8; dir++) {
 				int mx = x + dx[dir];
 				int my = y + dy[dir];
 				if (can_go(mx, my)) {
-					child_tree[mx][my]++;
+					trees_map[mx][my].push_front(1);
+					alive_tree++;
 				}
-			}
-		}
-	}
-	for (int i = 1; i <= N; i++) {
-		for (int j = 1; j <= N; j++) {
-			for (int k = 0; k < child_tree[i][j]; k++) {
-				trees_map[i][j].push_front(1);
-				alive_tree++;
 			}
 		}
 	}
