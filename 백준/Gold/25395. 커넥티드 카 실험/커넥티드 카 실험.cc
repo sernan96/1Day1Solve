@@ -6,9 +6,9 @@ using namespace std;
 class Car {
 public:
     int num;
-    long long x, h;
+    int x, h;
 
-    Car(int num = 0, long long x = 0, long long h = 0) {
+    Car(int num = 0, int x = 0, int h = 0) {
         this->num = num;
         this->x = x;
         this->h = h;
@@ -34,7 +34,7 @@ int main() {
 
     sort(cars.begin() + 1, cars.end(), [](const Car& a, const Car& b) {
         return a.x < b.x;
-        });
+    });
 
     // 정렬 후 시작 차량 S의 위치 찾기
     int start = -1;
@@ -45,8 +45,8 @@ int main() {
         }
     }
 
-    long long L = cars[start].x - cars[start].h;
-    long long R = cars[start].x + cars[start].h;
+    int L = cars[start].x - cars[start].h;
+    int R = cars[start].x + cars[start].h;
 
     int left = start, right = start;
     bool changed = true;
