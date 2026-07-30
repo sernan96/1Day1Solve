@@ -3,8 +3,6 @@
 #include <queue>
 #include <set>
 #include <algorithm>
-//테스트용
-#include <iostream>
 
 using namespace std;
 
@@ -75,11 +73,10 @@ void BFS(){
         }
     }
     answer = max(answer, (int)infected.size());
-    cout<<(int)infected.size()<<endl;
 }
 /*
 열고닫는  파이프 번호를 브루트포스로 생성 -> 길이는 1이상 k이하 
 문자열 생성마다 BFS 돌고 최대 감염된 배양체의 개수를 전역 answer 변수에 반영
 해당 문자열 기준으로 BFS 진행하며 해당 순번에 열리지 않은 파이프는 이동 X
-
+열려서 이동할 경우 카운트 증가하지않고 갈 수 있는 만큼 이동
 */
